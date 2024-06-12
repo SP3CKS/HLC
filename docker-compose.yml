@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  jardineria_dba:
+    image: postgres:13.3
+    container_name: CADSPostgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: pswJardineria
+      POSTGRES_DB: Jardineria
+      POSTGRES_USER: postgres
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+    ports:
+      - "5435:5432"
+    networks:
+      cadsnet:
+        ipv4_address: 172.80.10.5
+
+  node_app:
+    build:
+      context: .
+      dockerfile: ./CAVSdockerfiles/base/dockerfile
+    container_name: NodeApp
+    restart: always
+    ports:
+      - "3009:3000"
+    networks:
+      cadsnet:
+        ipv4_address: 172.80.10.10
+    depends_on:
+      - jardineria_dba
+
+networks:
+  cadsnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.80.10.0/24
