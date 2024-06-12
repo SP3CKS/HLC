@@ -2,7 +2,7 @@ version: '3.8'
 services:
   jardineria_dba:
     image: postgres:13.3
-    container_name: CADSPostgres
+    container_name: CAVSPostgres
     restart: always
     environment:
       POSTGRES_PASSWORD: pswJardineria
