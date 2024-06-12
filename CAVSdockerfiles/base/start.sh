@@ -1,25 +1,35 @@
 #!/bin/bash
+set -e
 
-# Mostrar un mensaje indicando que el contenedor se está iniciando
-echo "Starting container..."
+ping -c 4 172.80.10.6
 
-# Iniciar el servicio SSH
-service ssh start
+# Get environmetn
+REPO=$REPO
+DB_HOST=$DB_HOST
+DB_PORT=$DB_PORT
 
-# Mostrar un mensaje indicando que el servicio SSH se ha iniciado
-echo "SSH service started."
+cd /root/api
+rm -rf .git
 
-# Ejecutar otros comandos necesarios antes de mantener el contenedor en ejecución
-# Por ejemplo, podrías iniciar otros servicios o realizar configuraciones adicionales aquí
+git config --global init.defaultBranch master
+git config --global http.sslverify false
+git init
+git remote add origin ${REPO}
+git branch -m master
+git pull origin master
 
-# Crear un directorio de logs si no existe
-mkdir -p /root/logs
+# Replace values in env. file
+sed -i "s/127.0.0.1/${DB_HOST}/g" .env
+sed -i "s/5433/${DB_PORT}/g" .env
+cat .env
 
-# Crear un archivo de log vacío si no existe
-touch /root/logs/logs.txt
 
-# Mostrar un mensaje indicando que el contenedor está listo y en ejecución
-echo "Container setup complete. Keeping container running."
+#Instalacion de npm
+npm install -g npm-check-updates
+npm install --force
 
-# Mantener el contenedor en ejecución
+npm install @nestjs/common
+
+npm run start dev
+
 tail -f /dev/null

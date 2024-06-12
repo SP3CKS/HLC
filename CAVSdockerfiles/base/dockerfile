@@ -20,7 +20,7 @@ RUN mkdir -p /root/logs
 RUN touch /root/logs/logs.txt
 
 # Copy start.sh
-COPY ./CAVSdockerfiles/base/start.sh /root/start.sh
+COPY ./start.sh /root/start.sh
 RUN chmod +x /root/start.sh
 
 # Set entrypoint
